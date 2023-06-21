@@ -9,11 +9,14 @@ There is a MetaStore for and a BlockStore service.
 
 ### Scalability with multiple BlockStores ###
 Consistent hashing is a technique used in SurfStore's deployment with 1000 block store servers to determine the appropriate server for storing each block. Instead of relying on a single index server or random selection, consistent hashing creates a hash ring where each block store server is assigned a name based on its address using a hash function. When updating a file, the GetBlockStoreMap function is called, leveraging consistent hashing to obtain a map indicating which block servers should store the respective blocks based on their hash values. This approach ensures efficient load balancing, scalability, and eliminates bottlenecks by distributing blocks across servers and minimizing data redistribution when server sets change, ultimately enhancing the efficiency of the distributed storage system.
+<p align="center">
+<img src="misc/ch.gif" alt="isolated" width="600"/>
+</p>
 
 ### Raft Consensus Algorithm ###
 The Raft consensus algorithm is implemented in SurfStore to ensure fault tolerance, availability, and consistency of the metadata service. By replicating the MetaStore as a replicated state machine using the Raft protocol, concurrent updates to file metadata by multiple clients can be handled reliably. The log replication part of the Raft protocol is implemented in this project to achieve fault tolerance. The RaftSurfstoreServer, functioning as the fault-tolerant MetaStore, communicates with other servers via gRPC. Each server is aware of all other servers and does not dynamically join the cluster. Leader assignment is done through the SetLeader API call, eliminating the need for elections. Clients can interact with the system successfully as long as a majority quorum of nodes can be queried by the leader. If a majority of nodes are crashed, clients will block and wait until a majority are restored. Clients interacting with non-leader nodes will receive an error message and should retry to find the leader. The RaftTestingInterface and ChaosMonkey are used for testing, simulating server crashes and failures to ensure the correctness and adherence to Raft's properties.
 <p align="center">
-<img src="misc/surfsto.png" alt="isolated" width="600"/>
+<img src="misc/raft.gif" alt="isolated" width="600"/>
 </p>
 
 ## How to use Surf Store? ##
