@@ -3,9 +3,9 @@
 ## What is Fault Tolerant & Scalable Surf Store? ##
 Extending on the original [surfstore](https://github.com/Johnkhk/Surf-Store), this project implements scalability, which adds support for multiple BlockStores to handle the contents of a large service. This project also implements fault tolerancy by implementing the [Raft Consensus Algorithm](https://raft.github.io/), log replicating MetaStores and allowing effectively allows multiple nodes (servers) to work together in a cluster to achieve consensus on a shared state.. 
 
-Surf store is a cloud based file storage and syncing system like Drop Box.<br>
+SurfStore is a cloud based file storage and syncing system like DropBox.<br>
 It is based on protocol buffers using (gRPC Remote Procedure Calls). <br>
-There is a MetaStore for and a BlockStore service.
+It is fully written in Go.
 
 ### Scalability with multiple BlockStores ###
 Consistent hashing is a technique used in SurfStore's deployment with 1000 block store servers to determine the appropriate server for storing each block. Instead of relying on a single index server or random selection, consistent hashing creates a hash ring where each block store server is assigned a name based on its address using a hash function. When updating a file, the GetBlockStoreMap function is called, leveraging consistent hashing to obtain a map indicating which block servers should store the respective blocks based on their hash values. This approach ensures efficient load balancing, scalability, and eliminates bottlenecks by distributing blocks across servers and minimizing data redistribution when server sets change, ultimately enhancing the efficiency of the distributed storage system.
@@ -19,7 +19,7 @@ The Raft consensus algorithm is implemented in SurfStore to ensure fault toleran
 <img src="misc/raft.gif" alt="isolated" width="600"/>
 </p>
 
-## How to use Surf Store? ##
+## How to use SurfStore? ##
 1. Download and Install Go https://go.dev/doc/install
 2. Download plugins for gRPC
    1. go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
